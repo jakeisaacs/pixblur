@@ -1,0 +1,41 @@
+{{define "keyboard"}}
+    <input type="hidden" id="current-word" name="word" value=""
+        hx-get="/check-word"
+        >
+
+    <div class="word-display">
+        <!-- Each letter in the word will be represented here -->
+        <div class="letter-slot"></div>
+        <div class="letter-slot"></div>
+        <div class="letter-slot"></div>
+        <div class="letter-slot"></div>
+        <div class="letter-slot"></div>
+        <div class="letter-slot"></div>
+    </div>
+
+    <!-- Keyboard layout -->
+    <div class="keyboard-container">
+        <div class="keyboard-row">
+            {{range .Row1}}
+                <div class="key" hx-on:click="handleKeyClick(event)">{{.}}</div>
+            {{end}}
+        </div>
+        <div class="keyboard-row">
+            {{range .Row2}}
+                <div class="key" hx-on:click="handleKeyClick(event)">{{.}}</div>
+            {{end}}
+        </div>
+        <div class="keyboard-row">
+            {{range .Row3}}
+                <div class="key" hx-on:click="handleKeyClick(event)">{{.}}</div>
+            {{end}}
+        </div>
+        <div class="keyboard-row">
+            <div class="key wide-key"
+                hx-get="/keyboard"
+                hx-swap="innerHTML"
+                hx-target="#keys-letters-container">CLEAR</div>
+        </div>
+    </div>
+  
+{{end}}
