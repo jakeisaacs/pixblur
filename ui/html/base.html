@@ -15,16 +15,19 @@
             const eventSource = new EventSource('http://localhost:4000/events');
             
             eventSource.onmessage = function(event) {
-                const timerValue = event.data  // The image file path sent from the server
+                const data = event.data.split('\n');  // The image file path sent from the server
 
-                const imageElement = document.getElementById('live-image');
+                const timerValue = parseInt(data[0], 10);
+                const imgSrc = data[1];
+
                 const timerElement = document.getElementById('timer');
+                const imageElement = document.getElementById('live-image');
             
-                timer.textContent = parseInt(timerValue, 10);
+                timer.textContent = timerValue;
+
+                console.log(imgSrc);
                 
-                // Update the image source with the new image
-                console.log(imageElement.src.split('?')[0] + '?' + new Date().getTime());
-                imageElement.src = imageElement.src.split('?')[0] + '?' + new Date().getTime();  // Adding a timestamp to avoid caching issues
+                imageElement.src = imgSrc;  // Adding a timestamp to avoid caching issues
             };
             
             eventSource.onerror = function(error) {
@@ -42,7 +45,7 @@
                 <div id="win-message" class="win-message hidden">YOU WIN!!!</div>
                 <div id="timer" class="timer">00</div>
                 <div class="img-container">
-                    <img src='static/img/temp_blurred_image.png' alt='Blur' id='live-image'>
+                    <img src='' alt='Blur' id='live-image'>
                 </div>
                 <div id="keys-letters-container">
                 {{template "keyboard" .}}

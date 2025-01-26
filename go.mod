@@ -7,4 +7,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 )
 
-require golang.org/x/image v0.23.0 // indirect
+require (
+	golang.org/x/crypto v0.32.0 // indirect
+	golang.org/x/image v0.23.0 // indirect
+)
