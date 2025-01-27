@@ -13,7 +13,7 @@ body {
 
 header {
     background-color: #333;
-    margin-bottom: 50px;
+    margin-bottom: 10px;
     color: #ffffffa4;
     text-align: center;
     padding: 5px;
@@ -30,13 +30,57 @@ footer {
 }
 
 .hidden {
+  display: none;
   visibility: hidden;
 }
 
-.win-message {
+.game-container {
+  position: relative;
   display: flex;
+  margin-top: 20px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5;
+}
+
+.overlay {
+  position: absolute;  /* Positions relative to container */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 25%;
+  display: flex;      /* Centers the button */
   justify-content: center;
-  margin: 20px 100px;
+  align-items: center;
+  z-index: 10;        /* Ensures overlay is above other content */
+}
+
+.start {
+  width: 150px;
+  height: 80px;
+  background: green;
+  color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 24px;
+  transition: all 0.3s;
+  z-index: 5;
+  /* user-select: none; */
+}
+
+.countdown {
+  font-size: 72px;
+  color: white;
+  font-weight: bold;
+  z-index: 4;
+}
+
+.win-message {
+  /* display: flex; */
+  justify-content: center;
+  /* margin: 20px 100px; */
   background-color: #4CAF50;
   color: white;
   padding: 10px 20px;
@@ -48,9 +92,9 @@ footer {
 }
 
 .timer {
-  display: flex;
+  /* display: flex; */
   justify-content: center;
-  margin: 40px 150px;
+  margin: 20px 10px;
   background-color: #f5f5f5;
   padding: 15px 25px;
   border-radius: 8px;
@@ -66,6 +110,7 @@ footer {
 .img-container {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     align-items: center;
     border: 1px solid #000;
 }
@@ -74,7 +119,7 @@ footer {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 40px;
+    margin: 40px 10px;
   }
 
   .letter-slot {
@@ -90,6 +135,7 @@ footer {
 
   .keyboard-container {
     background: #e0e0e0;
+    margin: 20px 10px;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -174,49 +220,3 @@ footer {
       opacity: 0;
     }
   }
-
-/* 
-.word-container {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 50px;
-
-}
-
-.letter {
-    font-size: 2rem;
-    border-bottom: 2px solid #000;
-    width: 2rem;
-    text-align: center;
-}
-
-.keyboard-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.keyboard-row {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-}
-
-.key {
-    width: 40px;
-    height: 40px;
-    border: 1px solid #000;
-    margin: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 16px;
-    background-color: #fff;
-    user-select: none;
-}
-
-.key:hover {
-    background-color: #f0f0f0;
-} */

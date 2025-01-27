@@ -1,30 +1,58 @@
-// const socket = new WebSocket('ws://localhost:4000/ws');
-            
-// socket.onmessage = function(event) {
-// 	console.log("event: ", event);
-// 	const imagePath = event.data.split("|")[0]; 
-// 	const timerValue = event.data.split("|")[1];  // The image file path sent from the server
-// 	console.log('New image path:', imagePath);
-// 	const imageElement = document.getElementById('live-image');
-// 	const timerElement = document.getElementById('timer');
+function countDown() {
+	let count = 3
 
-// 	timer.textContent = parseInt(timerValue, 10);
-	
-// 	// Update the image source with the new image
-// 	imageElement.src = imagePath + '?' + new Date().getTime();  // Adding a timestamp to avoid caching issues
-// };
+	const gameOverlay = document.getElementById('gameOverlay');
+	const countdownOverlay = document.getElementById('countdownOverlay');
+	const countdown = document.getElementById('countdown');
 
-// socket.onerror = function(error) {
-// 	console.error('WebSocket error:', error);
-// };
+	gameOverlay.classList.add('hidden');
 
-const wordLength = 6;
+	setTimeout(() => {
+		countdown.textContent = count;
+		countdownOverlay.classList.remove('hidden');
+
+		const timer = setInterval(() => {
+			count--;
+			countdown.textContent = count;
+
+			if (count <= 0) {
+				console.log("starting game...")
+				clearInterval(timer);
+				countdownOverlay.classList.add('hidden');
+				startGame();
+			}
+		}, 1000);
+	}, 300);
+}
+
+function startGame() {
+	const eventSource = new EventSource('http://localhost:4000/events');
+
+	eventSource.onmessage = function(event) {
+		const data = event.data.split('\n');  // The image file path sent from the server
+
+		const timerValue = parseInt(data[0], 10);
+		const imgSrc = data[1];
+
+		const timerElement = document.getElementById('timer');
+		const imageElement = document.getElementById('live-image');
+
+		timerElement.textContent = timerValue;
+		imageElement.src = imgSrc;  // Adding a timestamp to avoid caching issues
+	};
+
+	eventSource.onerror = function(error) {
+		eventSource.close();
+		console.error('Eventsource error:', error);
+	};
+}
 
 function handleKeyClick(e) {
 	const keys = document.querySelectorAll('.key');
 	const letterSlots = document.querySelectorAll('.letter-slot');
 	const current_word = document.getElementById('current-word');
-	const win_message = document.getElementById('win-message');
+	const winOverlay = document.getElementById('winOverlay');
+	const wordLength = 6;
 
 	let new_word = '';
 
@@ -94,8 +122,7 @@ function handleKeyClick(e) {
 			});
 			response.then(res => res.json()).then(data => {
 				if (data["status"] === "success") {
-					win_message.classList.remove('hidden');
-					socket.close()
+					winOverlay.classList.remove('hidden');
 					console.log("Correct word!");
 				} else {
 					console.log("Incorrect word!");

@@ -11,8 +11,8 @@ As of 1/25/2025, this is at best an MVP solution. The image and win state are cu
 
 ## TODO
     - ~~Change Gaussian Blur functionalty to generate all images once (currently it generates them for each gameplay)~~
-    - Change win state to be fully maintained from server
+    - Change win state to be fully maintained from server (maybe... mostly on server as is)
     - Provide a score to the user (tbd since it already shows a timer)
-    - Add a start game button (game currently start on load)
+    - ~~Add a start game button (game currently start on load)~~
     - Offload image generation to be run from a route (currently generates on server start)
     - Implement basic CMS for managing daily games (adding pic, target word, etc.)

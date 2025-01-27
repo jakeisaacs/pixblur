@@ -5,31 +5,20 @@
 
     <div class="word-display">
         <!-- Each letter in the word will be represented here -->
-        <div class="letter-slot"></div>
-        <div class="letter-slot"></div>
-        <div class="letter-slot"></div>
-        <div class="letter-slot"></div>
-        <div class="letter-slot"></div>
-        <div class="letter-slot"></div>
+         {{range .Blanks}}
+            <div class="letter-slot"></div>
+         {{end}}
     </div>
 
     <!-- Keyboard layout -->
     <div class="keyboard-container">
+        {{range .Keyboard}}
         <div class="keyboard-row">
-            {{range .Row1}}
+            {{range .}}
                 <div class="key" hx-on:click="handleKeyClick(event)">{{.}}</div>
             {{end}}
         </div>
-        <div class="keyboard-row">
-            {{range .Row2}}
-                <div class="key" hx-on:click="handleKeyClick(event)">{{.}}</div>
-            {{end}}
-        </div>
-        <div class="keyboard-row">
-            {{range .Row3}}
-                <div class="key" hx-on:click="handleKeyClick(event)">{{.}}</div>
-            {{end}}
-        </div>
+        {{end}}
         <div class="keyboard-row">
             <div class="key wide-key"
                 hx-get="/keyboard"

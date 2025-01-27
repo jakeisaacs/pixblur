@@ -56,14 +56,15 @@ func (app *application) eventsHandler(w http.ResponseWriter, r *http.Request) {
 	interval := 1 * time.Second  // Time between updates
 
 	// Simulate image changes and push them to the client
-	for i := 30.0; i >= 0.0; i -= 1.0 {
+	for i := 30; i >= 0; i -= 1 {
 		elapsed := time.Since(startTime)
+		fmt.Printf("elapsed %s:\n", elapsed)
 		if elapsed >= duration {
 			break
 		}
 		select {
 		case <-app.gameState.stopGame:
-			app.gameState.score = int(elapsed) * 512
+			app.gameState.score = i * 512
 			fmt.Printf("Stopping game... Score: %d\n", app.gameState.score)
 			return
 		default:
@@ -75,7 +76,7 @@ func (app *application) eventsHandler(w http.ResponseWriter, r *http.Request) {
 			nameString := strings.ReplaceAll(fmt.Sprintf("%x", name), "/", "_")
 			imgPath := fmt.Sprintf("/static/img/test/%s.png", nameString)
 
-			_, err := fmt.Fprintf(w, "data: %f\ndata: %s\n\n", i, imgPath)
+			_, err := fmt.Fprintf(w, "data: %d\ndata: %s\n\n", i, imgPath)
 
 			if err != nil {
 				return
@@ -99,6 +100,9 @@ func (app *application) eventsHandler(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) showKeyboard(w http.ResponseWriter, r *http.Request) {
 
+	data := app.newTemplateData(r)
+	data.Blanks = make([]string, len(app.gameState.targetWord))
+
 	ts, err := template.ParseFiles("./ui/html/keyboard.html")
 	if err != nil {
 		fmt.Printf("Failed to parse... Error: %v", err)
@@ -106,7 +110,7 @@ func (app *application) showKeyboard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ts.ExecuteTemplate(w, "keyboard", app.keyboard)
+	err = ts.ExecuteTemplate(w, "keyboard", data)
 	if err != nil {
 		fmt.Printf("Failed to execute... Error: %v", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -121,6 +125,9 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
 	copyFile("ui/static/img/wizard.png", "ui/static/img/temp.png")
 
+	data := app.newTemplateData(r)
+	data.Blanks = make([]string, len(app.gameState.targetWord))
+
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
 		fmt.Printf("Failed to parse... Error: %v", err)
@@ -128,7 +135,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ts.ExecuteTemplate(w, "base", app.keyboard)
+	err = ts.ExecuteTemplate(w, "base", data)
 	if err != nil {
 		fmt.Printf("Failed to execute... Error: %v", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

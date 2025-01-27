@@ -6,6 +6,7 @@ import (
 	"image"
 	"image/png"
 	"log"
+	"net/http"
 	"os"
 	"strings"
 
@@ -81,4 +82,17 @@ func copyFile(inputPath string, outputPath string) {
 	}
 
 	log.Printf("Copied %s to %s", inputPath, outputPath)
+}
+
+func (app *application) newTemplateData(r *http.Request) templateData {
+	// Create a struct to pass to the template
+	keyboard := [][]string{
+		{"Q", "W", "E", "R", "T", "Y", "U", "I", "O"},
+		{"A", "S", "D", "F", "G", "H", "J", "K", "L"},
+		{"Z", "X", "C", "V", "B", "N", "M"},
+	}
+
+	return templateData{
+		Keyboard: keyboard,
+	}
 }

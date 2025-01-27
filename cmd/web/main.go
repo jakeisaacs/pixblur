@@ -5,9 +5,12 @@ import (
 	"net/http"
 )
 
+type templateData struct {
+	Blanks   []string
+	Keyboard [][]string
+}
 type application struct {
 	gameState *GameState
-	keyboard  Keyboard
 }
 
 type GameState struct {
@@ -16,37 +19,23 @@ type GameState struct {
 	targetWord string
 }
 
-type Keyboard struct {
-	Row1 []string
-	Row2 []string
-	Row3 []string
-}
-
 func main() {
 	inputPath := "ui/static/img/wizard.png" // Path to the input PNG file
 	outputPath := "ui/static/img/base.png"  // Path to save the output PNG file
-
-	// Define the 18 characters (this is just an example, you can change them)
-	row1 := []string{"Q", "W", "E", "R", "T", "Y", "U", "I", "O"}
-	row2 := []string{"A", "S", "D", "F", "G", "H", "J", "K", "L"}
-	row3 := []string{"Z", "X", "C", "V", "B", "N", "M"}
-
-	// Create a struct to pass to the template
-	keyboard := Keyboard{
-		Row1: row1,
-		Row2: row2,
-		Row3: row3,
-	}
 
 	app := &application{
 		gameState: &GameState{
 			stopGame:   make(chan int),
 			targetWord: "WIZARD",
 		},
-		keyboard: keyboard,
 	}
 
-	app.generateBlurredImages()
+	// Forced false conditional for now to avoid redundant calls each time server starts
+	// Turn to true when new blurred images are needed
+	// Temporary until game admin functionality is setup
+	if false {
+		app.generateBlurredImages()
+	}
 
 	mux := http.NewServeMux()
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
