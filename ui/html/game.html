@@ -1,0 +1,20 @@
+{{define "main"}}
+    <div class="overlay" id="gameOverlay">
+        <button class="start" onclick="countDown()">Start Game</button>
+    </div>
+    <div class="overlay hidden" id="countdownOverlay">
+        <div class="countdown" id="countdown"></div>
+    </div>
+    <div class="overlay hidden" id="winOverlay">
+        <div id="win-message" class="win-message">YOU WIN!!!</div>
+    </div>
+    <div id="game-container" class="game-container">
+        <div id="timer" class="timer">00</div>
+        <div class="img-container">
+            <img src='/static/img/blackout.png' alt='Blur' id='live-image'>
+        </div>
+        <div id="keys-letters-container">
+        {{template "keyboard" .}}
+        </div>
+    </div>
+{{end}}

@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+
+	"pixblur.jkaisix/ui"
 )
 
 type templateData struct {
@@ -38,9 +40,8 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
-	fileServer := http.FileServer(http.Dir("./ui/static/"))
 
-	mux.Handle("GET /static/", http.StripPrefix("/static", fileServer))
+	mux.Handle("GET /static/", http.FileServerFS(ui.Files))
 
 	mux.HandleFunc("GET /{$}", app.home)
 	mux.HandleFunc("GET /keyboard", app.showKeyboard)

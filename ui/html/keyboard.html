@@ -6,7 +6,11 @@
     <div class="word-display">
         <!-- Each letter in the word will be represented here -->
          {{range .Blanks}}
-            <div class="letter-slot"></div>
+            {{if eq . "last"}}
+                <div id="last" class="letter-slot"></div>
+            {{else}}
+                <div class="letter-slot"></div>
+            {{end}}
          {{end}}
     </div>
 
@@ -15,7 +19,7 @@
         {{range .Keyboard}}
         <div class="keyboard-row">
             {{range .}}
-                <div class="key" hx-on:click="handleKeyClick(event)">{{.}}</div>
+                <div id="key-{{.}}" class="key" hx-on:click="handleKeyClick(event)">{{.}}</div>
             {{end}}
         </div>
         {{end}}

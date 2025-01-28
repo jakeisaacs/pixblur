@@ -99,9 +99,10 @@ func (app *application) eventsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) showKeyboard(w http.ResponseWriter, r *http.Request) {
-
+	wordlen := len(app.gameState.targetWord)
 	data := app.newTemplateData(r)
-	data.Blanks = make([]string, len(app.gameState.targetWord))
+	data.Blanks = make([]string, wordlen)
+	data.Blanks[wordlen-1] = "last"
 
 	ts, err := template.ParseFiles("./ui/html/keyboard.html")
 	if err != nil {
@@ -120,13 +121,16 @@ func (app *application) showKeyboard(w http.ResponseWriter, r *http.Request) {
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	files := []string{
 		"./ui/html/base.html",
+		"./ui/html/game.html",
 		"./ui/html/keyboard.html",
 	}
 
 	copyFile("ui/static/img/wizard.png", "ui/static/img/temp.png")
 
+	wordlen := len(app.gameState.targetWord)
 	data := app.newTemplateData(r)
-	data.Blanks = make([]string, len(app.gameState.targetWord))
+	data.Blanks = make([]string, wordlen)
+	data.Blanks[wordlen-1] = "last"
 
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
