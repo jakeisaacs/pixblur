@@ -13,38 +13,37 @@ import (
 	"github.com/disintegration/imaging"
 )
 
-func (app *application) generateBlurredImages() {
-	inputPath := "./ui/static/img/temp.png"
+func (app *application) generateBlurredImage(inputFile, outputPath string, i int, radius float64, ch chan string) {
 
-	for i := 30; i >= 0; i-- {
-		img, err := applyGaussianBlur(inputPath, float64(i)*1.5)
-		if err != nil {
-			fmt.Printf("%v", err)
-			return
-		}
-
-		hash := sha256.New()
-		hash.Write([]byte(app.gameState.targetWord + fmt.Sprint(i)))
-		name := hash.Sum(nil)
-
-		nameString := strings.ReplaceAll(fmt.Sprintf("%x", name), "/", "_")
-
-		// Save the blurred image to a temporary file
-		tmpFile, err := os.Create(fmt.Sprintf("./ui/static/img/test/%s.png", nameString))
-		if err != nil {
-			fmt.Printf("unable to create temporary file: %v\n", err)
-			return
-		}
-		defer tmpFile.Close()
-
-		// Encode and save the blurred image as PNG
-		err = png.Encode(tmpFile, img)
-		if err != nil {
-			fmt.Printf("unable to encode and save image: %v\n", err)
-			return
-		}
-
+	//Generate blurred image
+	img, err := applyGaussianBlur(inputFile, float64(i)*radius)
+	if err != nil {
+		fmt.Printf("%v", err)
+		return
 	}
+
+	hash := sha256.New()
+	hash.Write([]byte(app.gameState.targetWord + fmt.Sprint(i)))
+	name := hash.Sum(nil)
+
+	nameString := strings.ReplaceAll(fmt.Sprintf("%x", name), "/", "_")
+	outputFile := fmt.Sprintf("%s/%s.png", outputPath, nameString)
+
+	// Save the blurred image to a temporary file
+	tmpFile, err := os.Create(outputFile)
+	if err != nil {
+		fmt.Printf("unable to create temporary file: %v\n", err)
+		return
+	}
+	defer tmpFile.Close()
+
+	// Encode and save the blurred image as PNG
+	err = png.Encode(tmpFile, img)
+	if err != nil {
+		fmt.Printf("unable to encode and save image: %v\n", err)
+		return
+	}
+	ch <- outputFile
 }
 
 // Function to read a PNG image, apply Gaussian blur, and send it to WebSocket clients

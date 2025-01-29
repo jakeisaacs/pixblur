@@ -32,13 +32,6 @@ func main() {
 		},
 	}
 
-	// Forced false conditional for now to avoid redundant calls each time server starts
-	// Turn to true when new blurred images are needed
-	// Temporary until game admin functionality is setup
-	if false {
-		app.generateBlurredImages()
-	}
-
 	mux := http.NewServeMux()
 
 	mux.Handle("GET /static/", http.FileServerFS(ui.Files))
@@ -47,6 +40,10 @@ func main() {
 	mux.HandleFunc("GET /keyboard", app.showKeyboard)
 	mux.HandleFunc("/events", app.eventsHandler)
 	mux.HandleFunc("POST /check_word", app.checkWord)
+
+	// !!!TO BE MODIFIED!!!
+	// Route to generate blurred images when desired
+	mux.HandleFunc("GET /blur_images", app.callGenerateBlurredImages)
 
 	log.Print("Serving on port 4000, http://localhost:4000")
 	log.Printf("input: %s, output: %s", inputPath, outputPath)

@@ -10,6 +10,36 @@ import (
 	"time"
 )
 
+func (app *application) callGenerateBlurredImages(w http.ResponseWriter, r *http.Request) {
+	inputFile := "./ui/static/img/temp.png"
+	outputPath := "./ui/static/img/test"
+	ch := make(chan string)
+
+	// !!! TO BE MODIFIED !!!
+	// Creating files through route using goroutine and channel
+	// Unnecessary but fun to practice their usage and closures
+	// I think breaking loop out of function is for the best...
+	// BUT... may put loop back into function and just give an n_iterations parameter
+
+	startTime := time.Now()
+
+	go func() {
+		radius := 1.5
+		for i := 30; i >= 0; i-- {
+			app.generateBlurredImage(inputFile, outputPath, i, radius, ch)
+		}
+		close(ch)
+	}()
+
+	for s := range ch {
+		w.Write([]byte(fmt.Sprintf("Generated %s\n", s)))
+	}
+
+	elapsed := time.Since(startTime)
+
+	w.Write([]byte(fmt.Sprintf("Completed after %s", elapsed)))
+}
+
 func (app *application) checkWord(w http.ResponseWriter, r *http.Request) {
 	var (
 		status string
