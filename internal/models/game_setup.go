@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 type GameSetup struct {
@@ -22,7 +22,7 @@ func main() {
 	name := "wizard"
 	valid_date := time.Now().Format("01/02/2006")
 
-	db, err := sql.Open("sqlite3", "./sqlite.db")
+	db, err := sql.Open("sqlite", "./sqlite.db")
 	if err != nil {
 		fmt.Errorf("Unable to open db: %v", err)
 	}
